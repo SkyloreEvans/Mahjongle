@@ -14,11 +14,26 @@ class Todo(db.Model):
     def __repr__(self):
         return '<Task %r>' % self.id
 
+class MahjongTile():
+    def __init__(self, id):
+        self.tileID = id
+        self.backIMG = 'mahjongTileArt/back.png'
+        self.frontIMG = 'mahjongTileArt/tile' + str(id) + '.png'
+
 with app.app_context(): 
     db.create_all()
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    id = 0
+    MahjongTiles = []
+    while(id < 34):
+        newTile = MahjongTile(id)
+        MahjongTiles.append(newTile)
+        id += 1
+
+    return render_template('index.html', tiles=MahjongTiles)
+"""
     if request.method == 'POST':
         task_content = request.form['content']
         new_task = Todo(content = task_content)
@@ -32,6 +47,7 @@ def index():
     else:
         tasks = Todo.query.order_by(Todo.date_created).all()
         return render_template('index.html', tasks=tasks)
+"""
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -44,7 +60,7 @@ def delete(id):
     except:
         return 'Error deleting task'
 
-
+"""
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
     task = Todo.query.get_or_404(id)
@@ -59,6 +75,9 @@ def update(id):
             return 'Error updating task'
     else:
         return render_template('update.html', task=task)
+"""
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# to launch virtual env, excute this command: .\\env\Scripts\activate
